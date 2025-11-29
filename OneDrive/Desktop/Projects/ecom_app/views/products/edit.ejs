@@ -1,0 +1,186 @@
+<%- layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg" style="border-radius: 15px; overflow: hidden; border: none;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white;">
+          <div style="font-size: 3rem; margin-bottom: 15px;">✏️</div>
+          <h2 class="card-title mb-2" style="color: white;">Edit Product</h2>
+          <p style="margin: 0; opacity: 0.9;">Update your product information below</p>
+        </div>
+
+        <div class="card-body p-5">
+          <form action="/products/<%= foundProduct._id %>?_method=PATCH" 
+                method="POST" 
+                class="needs-validation" 
+                novalidate>
+            
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="name" class="form-label fw-bold">
+                  <i class="bi bi-tag"></i> Product Name
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="name" 
+                  name="name" 
+                  value="<%= foundProduct.name %>"
+                  style="border: 2px solid #e0e0e0; border-radius: 8px;"
+                  required>
+                <div class="valid-feedback">Good!</div>
+                <div class="invalid-feedback">Please enter a product name.</div>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label for="price" class="form-label fw-bold">
+                  <i class="bi bi-currency-rupee"></i> Price
+                </label>
+                <input 
+                  type="number" 
+                  class="form-control form-control-lg" 
+                  id="price" 
+                  name="price" 
+                  value="<%= foundProduct.price %>" 
+                  min="1" 
+                  step="0.01"
+                  style="border: 2px solid #e0e0e0; border-radius: 8px;"
+                  required>
+                <div class="valid-feedback">Good!</div>
+                <div class="invalid-feedback">Please enter a valid price.</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="img" class="form-label fw-bold">
+                <i class="bi bi-image"></i> Image URL
+              </label>
+              <input 
+                type="url" 
+                class="form-control form-control-lg" 
+                id="img" 
+                name="img" 
+                value="<%= foundProduct.img %>"
+                style="border: 2px solid #e0e0e0; border-radius: 8px;"
+                required>
+              <div class="valid-feedback">Good!</div>
+              <div class="invalid-feedback">Please provide a valid image URL.</div>
+            </div>
+
+            <!-- Image Preview -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">Current Image</label>
+              <div style="background: linear-gradient(135deg, #f5f7fa, #c3cfe2); padding: 20px; border-radius: 8px; text-align: center;">
+                <img src="<%= foundProduct.img %>" 
+                     class="img-thumbnail" 
+                     style="max-width: 100%; max-height: 300px; border-radius: 8px;"
+                     alt="Product image"
+                     id="imagePreview">
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="desc" class="form-label fw-bold">
+                <i class="bi bi-file-text"></i> Description
+              </label>
+              <textarea 
+                class="form-control form-control-lg" 
+                id="desc" 
+                name="desc" 
+                rows="5"
+                style="border: 2px solid #e0e0e0; border-radius: 8px;"
+                required><%= foundProduct.desc %></textarea>
+              <div class="valid-feedback">Good!</div>
+              <div class="invalid-feedback">Please enter a description.</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <button type="submit" class="btn btn-success btn-lg" style="background: linear-gradient(135deg, #28a745, #20c997); border: none; font-weight: 600; padding: 12px 40px;">
+                <i class="bi bi-check-circle"></i> Update Product
+              </button>
+              <a href="/products/<%= foundProduct._id %>" class="btn btn-secondary btn-lg" style="font-weight: 600; padding: 12px 40px;">
+                <i class="bi bi-x-circle"></i> Cancel
+              </a>
+            </div>
+          </form>
+
+          <!-- Danger Zone -->
+          <hr class="my-4">
+          <div style="background: #ffe6e6; padding: 20px; border-radius: 8px; border-left: 4px solid #dc3545;">
+            <h6 class="text-danger fw-bold mb-3">
+              <i class="bi bi-exclamation-triangle"></i> Danger Zone
+            </h6>
+            <form action="/products/<%= foundProduct._id %>?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure? This action cannot be undone!')">
+                <i class="bi bi-trash"></i> Delete Product Permanently
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control, .form-control-lg {
+    transition: all 0.3s;
+  }
+
+  .form-control:focus, .form-control-lg:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+  }
+
+  .btn {
+    transition: all 0.3s;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-label {
+    color: #333;
+  }
+
+  .img-thumbnail {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<!-- Bootstrap Client-Side Validation -->
+<script>
+  (function () {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+
+  // Update image preview on URL change
+  document.getElementById('img').addEventListener('change', function() {
+    const url = this.value;
+    const preview = document.getElementById('imagePreview');
+    if (url) {
+      preview.src = url;
+      preview.onerror = function() {
+        this.style.display = 'none';
+      };
+      preview.onerror = null;
+    }
+  });
+</script>

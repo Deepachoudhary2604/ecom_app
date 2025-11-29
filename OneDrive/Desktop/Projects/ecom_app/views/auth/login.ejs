@@ -1,0 +1,120 @@
+<%- layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <!-- Main Card -->
+            <div class="card shadow-lg" style="border-radius: 15px; overflow: hidden; border: none;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">👤</div>
+                    <h2 class="card-title mb-2" style="color: white;">Welcome Back!</h2>
+                    <p style="margin: 0; opacity: 0.9;">Login to your EcoMart account</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <form action="/login" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-bold">Username or Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="border: 2px solid #e0e0e0; background: white;">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="username" 
+                                       name="username" 
+                                       placeholder="Enter your username or email"
+                                       style="border: 2px solid #e0e0e0; border-left: none;"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="border: 2px solid #e0e0e0; background: white;">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Enter your password"
+                                       style="border: 2px solid #e0e0e0; border-left: none;"
+                                       required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" style="background: linear-gradient(135deg, #667eea, #764ba2); border: none; font-weight: 600;">
+                            <i class="bi bi-box-arrow-in-right"></i> Login Now
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="text-muted mb-3">Don't have an account?</p>
+                        <a href="/signup" class="btn btn-outline-primary btn-lg w-100" style="color: #667eea; border: 2px solid #667eea; font-weight: 600;">
+                            <i class="bi bi-person-plus"></i> Create Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Info Card -->
+            <div class="card mt-4 shadow-sm" style="border-radius: 12px; border: 2px solid #ffc107; background: linear-gradient(135deg, #fff8e1, #fffde7);">
+                <div class="card-body">
+                    <h6 class="card-title mb-3" style="color: #ff8f00;">
+                        <i class="bi bi-info-circle"></i> Demo Credentials
+                    </h6>
+                    <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff8f00;">
+                        <small class="d-block"><strong>Admin Account:</strong></small>
+                        <small class="text-muted d-block">Username: <code>admin</code></small>
+                        <small class="text-muted d-block">Password: <code>admin123</code></small>
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #ff8f00;">
+                        <small class="d-block"><strong>User Account:</strong></small>
+                        <small class="text-muted d-block">Username: <code>user</code></small>
+                        <small class="text-muted d-block">Password: <code>user123</code></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+    }
+
+    .input-group-text {
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .form-label {
+        color: #333;
+    }
+
+    .btn-outline-primary {
+        transition: all 0.3s;
+    }
+
+    .btn-outline-primary:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white !important;
+        border-color: #667eea;
+        transform: translateY(-2px);
+    }
+</style>
