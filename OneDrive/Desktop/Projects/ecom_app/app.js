@@ -6,10 +6,14 @@ const seedDB = require('./seed');
 const ejsMate=require('ejs-mate');
 const session=require('express-session');
 const flash=require('connect-flash');
+const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/User');
 require('dotenv').config();
+
+// MongoDB URI (used by mongoose and session store)
+const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/ecom';
 
 app.use(express.json());
 
@@ -22,9 +26,10 @@ app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 
 app.use(session({
-    secret:'cat',
+    secret: process.env.SESSION_SECRET || 'cat',
     resave:false,
     saveUninitialized:true,
+    store: MongoStore.create({ mongoUrl: mongoUri }),
     cookie:{secure:false}
 }))
 
@@ -68,8 +73,8 @@ app.use(flash());
 //to set path to public folder
 app.use(express.static(path.join(__dirname,'public')));
 
+.
 //to connect to db
-const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/ecom';
 mongoose.connect(mongoUri)
 .then(()=>{
     console.log('db connected');
@@ -93,6 +98,11 @@ app.use((req, res, next) => {
 // Home route - redirect to products
 app.get('/', (req, res) => {
     res.redirect('/products');
+});
+
+// simple health endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ ok: true, uptime: process.uptime() });
 });
 
 const productRoutes = require('./route/product'); 
