@@ -94,8 +94,11 @@ app.use(flash());
 //to set path to public folder
 app.use(express.static(path.join(__dirname,'public')));
 
+app.use(express.urlencoded({extended:true}));
+
 //to connect to db
 mongoose.connect(mongoUri)
+
 .then(()=>{
     console.log('db connected', isAtlas ? '(Atlas)' : '(local)');
 })
@@ -105,8 +108,6 @@ mongoose.connect(mongoUri)
 
 //to seed data in db
 // seedDB();
-
-app.use(express.urlencoded({extended:true}));
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
@@ -134,6 +135,12 @@ app.use(reviewRoutes);
 const authRoutes = require('./route/auth');
 app.use(authRoutes);
 
+const cartRoutes = require('./route/cart');
+app.use(cartRoutes);
+
+const wishlistRoutes = require('./route/wishlist');
+app.use(wishlistRoutes);
+
 // Process-level error handlers (capture startup/runtime errors)
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
@@ -143,7 +150,6 @@ process.on('uncaughtException', err => {
 });
 
 // Export app for serverless platforms (Vercel) and standalone run
-const PORT = process.env.PORT || 8080;
 if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`server at ${PORT}`);
