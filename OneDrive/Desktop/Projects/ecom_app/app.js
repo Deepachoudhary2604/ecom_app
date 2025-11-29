@@ -73,7 +73,6 @@ app.use(flash());
 //to set path to public folder
 app.use(express.static(path.join(__dirname,'public')));
 
-.
 //to connect to db
 mongoose.connect(mongoUri)
 .then(()=>{
