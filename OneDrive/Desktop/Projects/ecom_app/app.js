@@ -15,6 +15,27 @@ require('dotenv').config();
 // MongoDB URI (used by mongoose and session store)
 const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/ecom';
 
+// Startup diagnostics (non-sensitive)
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const PORT = process.env.PORT || 8080;
+const hasMongoUri = !!process.env.MONGODB_URI;
+const hasSessionSecret = !!process.env.SESSION_SECRET;
+const isAtlas = hasMongoUri && process.env.MONGODB_URI.includes('mongodb.net');
+
+function masked(value) {
+  if (!value) return '';
+  if (value.length <= 8) return '****';
+  return `${value.slice(0,4)}...${value.slice(-4)}`;
+}
+
+console.log('--- Startup diagnostics ---');
+console.log('NODE_ENV:', NODE_ENV);
+console.log('PORT:', PORT);
+console.log('MONGODB_URI present:', hasMongoUri ? 'yes' : 'no');
+console.log('Using Atlas:', isAtlas ? 'yes' : 'no');
+console.log('SESSION_SECRET present:', hasSessionSecret ? 'yes' : 'no');
+console.log('---------------------------');
+
 app.use(express.json());
 
 const methodOverride = require('method-override');
@@ -76,10 +97,10 @@ app.use(express.static(path.join(__dirname,'public')));
 //to connect to db
 mongoose.connect(mongoUri)
 .then(()=>{
-    console.log('db connected');
+    console.log('db connected', isAtlas ? '(Atlas)' : '(local)');
 })
 .catch((err)=>{
-    console.log(err);
+    console.error('Mongo connection error:', err);
 })
 
 //to seed data in db
@@ -112,6 +133,14 @@ app.use(reviewRoutes);
 
 const authRoutes = require('./route/auth');
 app.use(authRoutes);
+
+// Process-level error handlers (capture startup/runtime errors)
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', err => {
+    console.error('Uncaught Exception thrown:', err);
+});
 
 // Export app for serverless platforms (Vercel) and standalone run
 const PORT = process.env.PORT || 8080;
